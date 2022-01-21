@@ -17,7 +17,6 @@ cat id_rsa.pub | pbcopy
 ssh -T git@github.com
 ```
 
-
 # ~~git-personal-auth-token~~
 Pivoted from this to avoid 'God-access'  
 [Using Personal Access Tokens with GIT and Github](https://www.edgoad.com/2021/02/using-personal-access-tokens-with-git-and-github.html)
@@ -35,6 +34,3 @@ git config --global credential.helper cache
 ```
 
 First iteration - Generated a 30-day personal access token
-
-
-
