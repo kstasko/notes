@@ -17,8 +17,9 @@ cat id_rsa.pub | pbcopy
 ssh -T git@github.com
 ```
 
-Pivoted from this to avoid 'God-access'
+
 # ~~git-personal-auth-token~~
+Pivoted from this to avoid 'God-access'  
 [Using Personal Access Tokens with GIT and Github](https://www.edgoad.com/2021/02/using-personal-access-tokens-with-git-and-github.html)
 
 #### Solution
