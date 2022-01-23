@@ -1,7 +1,7 @@
 # Authenticate Github using SSH Key
 ## Useful Links
 [Using Git with SSH Keys](https://linuxkamarada.com/en/2019/07/14/using-git-with-ssh-keys/#.YenwuS-B19c)  
-[Markdown Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)  
+[Markdown Cheatsheet](https://github.coxm/adam-p/markdown-here/wiki/Markdown-Cheatsheet)  
 
 #### Undo cache-ing of Personal Access token
 (If configured)
