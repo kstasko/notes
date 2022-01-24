@@ -1,0 +1,160 @@
+## "You will need to know this..."
+### Course Material
+---
+[Udemy Class Link](https://www.udemy.com/course/aws-data-analytics/)  
+[Sundog Course Material](https://sundog-education.com/aws-certified-big-data-course-materials/)
+
+### S3 Overview 
+---
+#### **Buckets**   
+- buckets must have a globally unique name
+- buckets are defined at the region level
+- Naming convention
+    - no uppercase
+    - no underscore
+    - 3-63 characters long
+    - not an IP
+    - must start wth lowercase letter or number
+
+#### **Objects**  
+- objects have a Key. The key is the FULL path
+    - there is no concept of directories within buckets
+- max size for an object is 5TB
+- anything more than 5GB must use 'multi-part upload'
+> just remember now that S3 is strongly consistent, anytime you do a write, then you do a read after, the read is going to give you the same results of what you just uploaded  
+
+### S3 Storage Classes
+---  
+#### **S3 Standard - General Purpose**  
+- High durability of objects across multiple regions
+- Sustain two concurrent facility failures
+Use Cases: Big Data Analytics, mobile & gaming applications, etc
+
+#### **S3 Standard-Infrequent Access (IA)**  
+>Suitable for data this is less frequently access, but requires rapid access when needed
+- lower cost compared to amazon s3 standard
+Use Cases: data store for disaster recovery, backups,
+
+#### **S3 One Zone-Infrequent Access**  
+- Same as IA but stored in a single Availability Zone (instead of multiple like in IA)
+- supports SSL for data at transit and encryption at rest
+- low cost compared to IA (20%)
+
+#### **S3 Intelligent Tiering**  
+- small monthly monitoring and auto-tiering fee
+- automatically moves objects between two access tiers based on changing access patterns
+
+#### **Amazon Glacier**  
+- low cost object storage meant for archiving/backup
+- data is retained for the longer term (decades)
+- Each item in Glacier is called 'Archive' (up to 40TB)
+- Archives are stored in Vault
+- minimum storage duration of 90 days
+
+#### Three retrieval options:
+- `expedited (1 to 5 minutes)`
+- `standard (3 to 5 hours)`
+- `bulk (5 to 12 hours)`
+
+#### **Amazon Glacier Deep Archive** 
+- minimum storage duration of 180 days
+#### Retrieval Options
+- `Standard (12 hours)`
+- `Bulk (48 hours)`
+
+### S3 Lifecycle Rules
+--- 
+- **transition actions** it defines when objects are transitioned to another storage class
+- **expiration actions** configure objects to expire(delete) after some time
+    - can be used to delete old versions of files (if versioning is enabled)
+
+`rules can be created for a certain prefix`
+`rules can be created for certain object tags`
+
+### S3 Versioning
+---  
+`Any file that is not versioned prior to eabling versioning will have version 'null'`
+`Suspending versioning does not delete the previous versions`
+
+### S3 Replication (CRR & SRR)
+---
+`Buckets can be in different accounts`
+#### **Cross Region Replication (CRR)**
+Use Case: compliance, lower latency access, replication across accounts
+#### **Same Region Replication (SRR)**
+Use Case: log aggregation, live replication between production and test accounts
+
+- After activating, only new objects are replicated
+- for DELETE operations
+    - cannot replicate delete markers from source to target 
+    - deletions with a version ID are not replicated
+    - basically deletion replication isn't a thing
+- there is no chaining of replication
+
+### S3 Performance
+---
+- 3,500 PUT/COPY/POST/DELETE per second per prefix
+- 5,500 GET/HEAD requests per second per prefix
+
+Multi-Part upload:
+- recommended for files more than 100MB
+- must be used for files more than 5 GB
+S3 Transfer Acceleration
+- increase transfer speed by transferring file to an AWS edge location which will forward the data to the S3 bucket in the target region
+- compatible with multi-part upload
+
+### S3 Encryption
+---  
+` it is important to understand which ones are adapted to which situation for the exam`
+**SSE-S3** - encrypts S3 objects using keys handled and managed by AWS
+- object is encyrpted server side
+- AES-256 encryption type
+- must set header "x-amz-server-side-encryption":"AES256"
+
+**SSE-KMS** - leverage AWS Key Management Service to manage encryption keys
+- KMS advantages: user control + audit trail
+- object is encrypted server side
+- must set header "x-amz-server-side-encryption":"aws:kms"
+
+**SSE-C** - when you want to manage your own encryption
+- Amazon S3 does not store the encryption key you provide
+- HTTPS must be used
+- Encryption key must be provided in HTTP headers, for every HTTP request made
+
+**Client Side Encryption**
+- client library such as the S3 Encryption Client
+- clients must encrypt data themselves before sending to S3
+- clients must decrpt data themselves when retrieving from S3
+- customer fully manages the keys and encryption cycle
+
+**Encryption in transit(SSL/TLS)
+S3 exposes
+- HTTP endpoint: non encrypted
+- HTTPS endpoint: encryption in flight
+
+Mandatory for SSE-C
+
+**S3 Security**
+User based - IAM policies
+Resource based 
+- bucket policies - bucket wide rules from the s3 console - allows cross account
+- object access control list (ACL) - finer grain
+- bucket access control list (ACL) - less common
+>You do not need to remmeber these going into the exam. What you do need to remember is that there is a way to block public access to your S3 bucket through these settings.  
+
+`anytime in the exam you see the access of certain files to certain users for a limited amount of time, think **pre-signed URLs**`
+
+### S3 Select & Glacier Select
+---
+- retrieve less data using SQL by performing select statements
+`Note: Glacier Select can only do **uncompressed** csv files`
+- restore the file, then use s3 select for compressed csv files in glacier
+
+### S3 Event Notification
+---
+Target Services:
+- SNS
+- SQS
+- Lambda
+
+
