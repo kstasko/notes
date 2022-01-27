@@ -157,4 +157,103 @@ Target Services:
 - SQS
 - Lambda
 
+### DynamoDB
+---  
+- fast and consistent in performance (low latency on retrieval)
+- enables event driven programming with DynamoDB Streams
+- maximum size of a item is 400KB
+- string, number, binary, boolean, null
+- document types: list, map
+- set types: string set, number set, binary set
 
+#### Partition Keys
+- Partition Key only (HASH)
+- Partition Key + Sort Key
+> dynamoDB is going to be more for when your data is hot and smaller. While S3 is going to be more when data is a bi colder but much bigger
+
+### Provisioned Throughput
+- you can set up auto-scaling if you don't want to manually confiure RCU and WCU
+- Throughput can be exceeded temporarily using 'burst credit'
+    - if burst credit are empty, you'll get a `ProvisionedThroughputException`
+    - then it is advised to do an exponential back-off retry
+
+#### Write Capcity Units (WCU)
+- one write capacity unit represent one write per second for an item up to 1 KB in size
+- if the items are larger than 1 KB, more WCU are consumed
+
+#### Strongly vs Eventually Consistent Read
+**Eventually Consistent** - If we read just after a write, it's posisble we will get unexpected response because of replication
+**Strongly Consistent** - If we read just after a write, we will get the correct data
+
+By Default DynamoDB uses Eventually Consistent RReads, but GetItem, Query & Scan provide 'ConsistentRead' parameters you can set to True
+
+#### Read Capacity Units (RCU)
+- one read capacity unit represents one strongly consistent read per second, or two eventually consistent read per second for an item up to 4 KB in size
+- if the items are larger than 4 Kb more RCU are consumed
+
+### DynamoDB - Partitions Internal
+Each partition:
+- can have a maximum of 3000 RCU / 1000 WCU
+- Maximum of 10GB per partition
+
+`To compute the number of partitions:`
+- By capacity (TOTAL RCU / 3000) + (TOTAL WCU / 1000)
+- By Size: total size / 10 Gb
+- Total Partitions = CEILING(MAX(Capacity, Size))
+
+` WCU and RCU are spread evenly between partitions`
+
+### DynamoDB - Writing Data
+---  
+**putItem** - Write data to DynamoDB (create or full replace)
+- consumes WCU
+**UpdateItem** - Update data in DynamoDb (partial update of attributes)
+- possibility to use Atomic Counters and increase them
+**Conditional Writes** 
+- accept a write/update only if conditions are respected, otherwise reject
+- helps with concurrent access to items
+- no performance impact
+**BatchWriteItem**
+- Up to 25 PutItem and / or DeleteItem in one call
+- Up to 16 MB of data written
+- Up to 400 KB of data per item
+
+### DynamoDb - Deleting Data
+---
+**DeleteItem**
+- delete an individual row
+- ability to perform a conditional delete
+**DeleteTable**
+- delete a whole table and all its items
+- much quicker deletion than calling DeleteItem on all items
+- much quicker than deleting individual records but it's the whole thing
+- it's possible for part of a batch to fail, in which case we have to try the failed items again
+
+### DynamoDb - Reading Data
+**GetItem** 
+- Read based on Primary key
+- Primaryk Key = HASH or HASH-RANGE
+- Eventually consistent read by default
+- option to use strongly consistent reads
+**BatchGetItem**
+- Up to 100 Items
+- Up to 16 MB of data
+- Items are retrieved in parallel to minimize latency
+**Query**
+**Scan**
+- scan the entire table and then filter out data (inefficient)
+- for faster performance use parallel scans
+
+### LSI & GSI
+---  
+#### LSI
+- alternate range key for your table, local to the hash key
+- up to five LSI
+- sort key consists of exactly one scalar attribute
+- must be specified on table creation
+
+#### GSI
+- define new partition key + optional sort key
+- must define RCU and WCU for each GSI
+
+***** Aced Quiz and moving on to other topics that need more help. *****
