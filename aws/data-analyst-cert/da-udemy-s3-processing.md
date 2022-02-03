@@ -405,11 +405,188 @@ External Hive Metastores
 - External metastore offer better resiliency / integration (Glue Data Catalog, RDS)
 
 ### Pig on EMR
+- writing mappers and reducers by hand takes a long time
+- Pig introduces *Pig Latin* a scripting language that lets you use SQL-like syntax to define your map and reduce steps
+- highly extensible with user-defined functionality
+
+#### *AWS Integration*
+- ability to use multiple file systems (not just HDFS)
+- load JAR's and scripts from S3
+
+> basically a higher level alternative to writing MapReduce code not quite SQL
 
 ### HBASE on EMR
+- non-relational, petabyte-scale datbase
+- based on Google's BigTable, on top of HDFS
+- in-memory
+- hive integration
+
+*Sounds a lot like DynamoDB*  
+- both are NoSQL datbases inteded for the same sort of things
+- but if you're all-in with AWS anyhow, DynamoDB has advantages
+    - fully managed
+    - more integration with other AWS services
+    - glue integration
+- HBase has some advantages though:
+    - efficient storage of sparse data
+    - appropriate for high frequency counters (consistent reads & writes)
+    high write & update throughput
+    - more integration with Hadoop
+
+*Hbase / AWS integration*
+- can store data on S3 via EMRFS
+- can back up to S3
 
 ### Presto on EMR
+#### *Overview*
+- can connect to many different 'big data' databases and data stores at once and query across them
+- **interactive** queries at **petabyte scale**
+- SQL style
+- optimized for OLAP 
+- developed and still partially maintained by Facebook
+- this is what Athena uses under the hood
+- expoes JDBC, Command-Line and Tableau interfaces
+
+#### *Connectors*
+HDFS , S3 , Cassandra , MongoDB , HBase , SQL , Redshift , Teradata
+
+> It's very fast and easy to get Presto up and running with EMR now in
+> Presto all the processing is done in memory and pipelined across the network in between stages.
+> This avoids any unecessary IO overhead and that is why it is so fast.
 
 ### Zeppelin and EMR Notebooks
+- It's a hosted notebook on your cluster that allows you to interactively run Python scripts and code against your data that is stored on your cluster
+- it can interleave with nicely formatted notes
+- allows you to share these notebooks with other people that are using your cluster.
+
+Spark, Python, JDBC, HBase, Elasticsearch + more
+
+**Zeppelin + Spark**
+- can run Spark code interactively
+    - this speeds up your development cycle
+    - allows easy experimentation and exploration
+- can execute SQL queries directly against SparkSQL
+- Query results may be visualized in charts and graphs
+- Makes Spark feel more like a data science tool
+
+**EMR Notebook**
+- Similar concept to Zeppelin with more AWS Integration
+- Notebooks backed up to S3
+- `Provision clusters fro the notebook`
+- Hosted inside a VPC
+- Accessed only via AWS console
 
 ### Hue, Splunk & Flume
+> The important things here are what each technology does and how it integrates with AWS.
+
+**Hue**
+- Hadoop User Experience
+- Graphical front-end for your applications on your EMR cluster
+- IAM integration
+- S3: can browse & move data between HDFS and S3
+
+`Remember Hue is a management tool, front-end console for you entire EMR console`
+
+**Splunk**
+- Splunk / Hunk / 'makes machine data acessible, usable and valuable to everyone'
+- `operational tool - can be used to visualize EMR and S3 data using your EMR Hadoop cluster
+
+**Flume**
+- another way to stream data into your cluster
+- made from the start with Hadoop in mind
+    - built-in sinks for HDFS and HBase
+- orignally made to handle log aggregation
+
+> a distributed reliable and available service that allows you to efficiently collect aggregate and move large amounts of log data in particular
+
+> a way of streaming raw data into a cluster
+
+**MXNet**
+- like Tensorflow, a library for building accelerating neural networks
+- included on EMR
+
+> MXNet is a framework that is used to build depp learning applications
+
+### S3DistCP & other Services
+**S3DistCP**
+- tool for copying large amounts of data
+    - from S3 into HDFS or vice versa
+- uses MapReduce to copy in a distributed manner
+- suitable for parallel copying of large numbers of objects
+    - across buckets, across accounts
+
+### EMR Security and Instance Types
+**Security**
+- IAM policies
+    - grant or deny permissions
+    - allow user actions
+    - combine with tagging to control access per cluster
+- Kerberos
+    - secure user authentication
+- SSH
+    - Secure connection to command line
+    - Tunneling for web interfaces
+    - can use Kerberos or EC2 key pairs
+- IAM roles
+    - control access to EMRFS data based on user, group, location of data
+    - each cluster must have a service role and a role for the EC2 instance profile
+    - IAM policies attached to roles
+    - auto-scaling role
+    - service-linked roles
+
+Block public access
+- easy way to prevent public access to data stored on your EMR cluster
+- can set at the account level before creating the cluster
+
+**Instance Types**  
+`master node`:
+- m5.xlarge if < 50 nodes, larger if > 50 nodes  
+
+`nore & task nodes`:
+- m5.xlarge is usually good
+- if cluster waits a lot on external dependencies, t2.medium
+- improved performance: m4.xlarge
+- computation-intensive applications: high CPU instances
+- database, memory-caching applications: high memory instances
+- network / CPU-intensive (NLP, ML) - cluster computer instances
+
+`spot instances`
+- good choice for task nodes
+- only use on core * master if you are testing or very cost-sensitive; you are risking partial data loss
+
+## Data Pipeline
+---  
+**Overview**
+> basically lets you schedule tasks for processing your big data
+a web service that helps you relibaly process and move data between different AWS compute and storage services at specified intervals.
+
+- destinations include S3, RDS, DynamoDB, Redshift and EMR
+- Manages task dependencies
+- retried and notifies on failures
+- cross-region pipelines
+- precondition checks
+- data sources may be on-premises
+- highly available
+
+**Activities**
+> There are several different activities that a data pipeline can do and an activity is an an action that AWS data pipeline initiates on your behalf as part of a pipeline.
+
+- EMR
+- Hive
+- Copy
+- SQL
+- Scripts
+
+## Step Functions
+---
+### *Overview*
+> It's purpose in life is to let you design workflows throughout AWS
+
+- design workflows
+- easy visualizations
+- advanced error handling and retry mechanism outside the code
+- audit of the history of workflows
+- ability to 'Wait' for an arbitrary amount of time
+- Max execution time of a State Machin is 1 year
+
+
