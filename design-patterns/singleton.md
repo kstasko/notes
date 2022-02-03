@@ -1,27 +1,27 @@
 ## Singleton (127 - 136)
-### creational pattern
+#### *creational pattern*
 ---  
 
-#### Intent
+### *Intent*
 Ensure a lass only has one instance, and proide a global point of access to it
 
 > How do we ensure that a class has only one instance and that the instance is easily accesible?...
 > ...make the class itself responsible for keeping track of its sole instance (by intercepting requests to create new objects), and it 
 > can provide a way to access the instance.
 
-#### **Applicability**
+### *Applicability*
 Use the `singleton` pattern when:
 - there must be exactly one instance of a class, and it must be accesible to clients from a well-known access point
 - when the sole instance should be extensible by subclassing, and clients should be able to use an extended instance without modifying their code.
 
-#### **Consequences**
+### *Consequences*
 - controlled acces to sole instance
 - reduced name space`
 - permits refinement of operations and representation
 - permits a variable number of instances
 - more flexible than class operations
 
-### **Implementation**
+### *Implementation*
 **Ensuring a unique instance**
 > The singleton pattern makes the sole instance a normal instance of a clas, but that class is written so that only one instance can ever be created.
 > A common way to do this is to hide the operation that creates the instance behind a class operation (static member function) that gauruntees only once instance is created.
