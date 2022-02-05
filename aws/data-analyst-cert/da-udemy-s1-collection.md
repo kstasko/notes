@@ -4,13 +4,13 @@
 
 ## Kinesis Suite
 ---  
-- **Kinesis Firehose** is `near-real time` streaming of data
-- a **Kinesis Streams** Record is a data blob `up to 1 MB in size`
-- *Producers* can only produce 1MB or 1000 messages per second at write per shard  
+- `Kinesis Firehose` is **near-real time** streaming of data
+- a `Kinesis Streams` Record is a data blob **up to 1 MB in size**
+- `Producers` can only produce 1MB or 1000 messages per second at write per shard  
     - If you go over that limit: `ProvisionedThroughputException` is raised
-- *Consumer Classic* gets 2MB per second per shard across all consumers  
+- `Consumer Classic` gets 2MB per second per shard across all consumers  
    - or you get five API calls per second per shard across all consumers
-- *Consumer Enhanced Fanout* gets 2MB per second at read per shard, per enhanced Consumer. 
+- `Consumer Enhanced Fanout` gets 2MB per second at read per shard, per enhanced Consumer. 
 
 Data Retention
 - 24 hour retention by default
@@ -18,8 +18,8 @@ Data Retention
 
 
 ### Kinesis Producers (KPL)
-- **Kinesis Agent** is `an agent that runs on servers`
-- **Kinesis Producer SDK** uses PutRecords()  
+- `Kinesis Agent` is **an agent that runs on servers**
+- `Kinesis Producer SDK` uses PutRecords()  
    - Use Case: low throughput, higher latency, simple API, AWS lambda  
    - `Managed AWS sources for Kinesis Data Streams`
       - Cloudwatch Logs
@@ -52,7 +52,7 @@ Data Retention
 - `Scale resharding cannot be done in parallel and resharding takes a few seconds per shard`  
    - `for 1000 shards to double to 2000, it takes about 8.3 hours`  
    - 
-### Kinesis Data Streams 
+## Kinesis Data Streams 
 ---
 **Handling Duplicates for Producers**
 - producer retries can create duplicates due to network timeouts
@@ -65,7 +65,7 @@ consumer retries happen when record processors restart:
 - `application is deployed`
    - `fix`: make your conusmer application idempotent, if the final destination can handle duplicates, it's recommended to do it there  
 
-### Data Firehose
+## Data Firehose
 ---
 stores data into a target destination (batch writes)
 - Destination examples:
@@ -87,8 +87,9 @@ You can stream CloudWatch logs into:
 * `Kinesis Data Firehose`
 * `AWS Lambda`
 
-### SQS Overview
+## SQS 
 ---
+### *Overview*
 - default `retention is 4 days, can be set up to 14 days`. 
 - 256 kB per message sent  
 - horizontal scaling in terms of number of consumers  
@@ -96,15 +97,15 @@ You can stream CloudWatch logs into:
 - consumers poll messages, consumer processes that message and then deletes it from the queue
     - `messages cannot be processed by multiple different consumer applications`
 
-**SQS Use Case**
+### *Use Case*
 - decouple applications (e.g. asyncronous payments)
 - buffer writes to database (e.g. voting application)
 - handle large loads of incoming messages (email sender)
 
-**SQS Extended Client**
+### *SQS Extended Client*
 - sends S3 key to SQS queue and tells consumers where to download the larger than 256kB file
 
-**SQS Limits**
+### *Limits*
 - `FIFO supports up to 3000 message per second (using batching)`
 - maximum message size is 256kB
 
@@ -112,29 +113,29 @@ You can stream CloudWatch logs into:
 ---
 `**Check Udemy Note for lecture**' 
 
-### IoT Overview 
+## IoT 
 ---
+### *Overview*
 > I would say the most important things [to know] is going to be the thing registry to know that there is security, the IoT message broker, the rules engine and the device shadow.  
 
 `**device gateway**` - enables your device to securely communicate
 `**rules engine**` - contains a bunch of rules that you can define allowing you to modify the behavior of your devices based on them. `It alls us to send data to many different targets.`
 `**device shadow**` - literally a shadow of my device. If your device is disconnected from the network, the shadow helps tell it what rule/action to follow to be back up to date
 
-### IoT Components Deep Dive
----  
+### *Components Deep Dive*
 #### **Device Gateway**  
-* supports the entrypoint of IoT Devices  
-* allows devices to securely and efficiently communicate with AWS IoT  
-* `supports the MQTT, Websockets and HTTP 1.1`  
-* fully managed and scales to 1 billion devices  
-* no infrastructure management  
+- supports the entrypoint of IoT Devices  
+- allows devices to securely and efficiently communicate with AWS IoT  
+- `supports the MQTT, Websockets and HTTP 1.1`  
+- fully managed and scales to 1 billion devices  
+- no infrastructure management  
 
 #### **Message Broker**
 * pub/sub messaging pattern - low latency
 * devices can communicate this way using `MQQTT, Websockets, or HTTP 1.1.`  
 * anything connected to the message broker will receive the message
 
-#### **IoT Registry**  
+#### **Registry**  
 * all connected devices are represented in the Registry  
 * organizes the resources associated with each device
 * supports metadata for each device

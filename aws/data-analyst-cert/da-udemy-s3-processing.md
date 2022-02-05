@@ -3,45 +3,47 @@
 [Udemy Class Link](https://www.udemy.com/course/aws-data-analytics/)  
 [Sundog Course Material](https://sundog-education.com/aws-certified-big-data-course-materials/)
 
----  
 ## AWS Lambda
+---  
+### *Overview*
 A way to run code snippets in the cloud - serverless, continuous scaling
 - often used to process data as it's moved around
 
-### Lambda Integration
+### *Integrations*
 **Why not just run a server**
 - server management (patches, monitoring, hardware failures, etc.)  
 - servers can be cheap, but scaling gets expensive really fast  
 - `you do not pay for processing time you do not use`  
 - easier to split up development between front-end and back-end  
 
-`Supported Languages`
-( Node.js, Python, Java, C#, Go, Powershell, ruby )
+`Supported Languages`  
+( Node.js, Python, Java, C#, Go, Powershell, Ruby )
 
-**Lambda & redshift**
-- `Best practice for loading data into redshift is the COPY command`
+#### *Lambda & `Redshift`*
+- `Best practice for loading data into Redshift is the COPY command`
 - Lambda can batch up new data and load them with COPY
 
-**Lambda & Kinesis**
-> You need to realize that if your batch size for streaming data is too large, that could cause your Lambda service to time out.
+#### *Lambda & `Kinesis`*
+> If your batch size for streaming data is too large, that could cause your Lambda service to time out.
 
 `kinesis stream should be in the same account as your lambda`
 
-- Lambda code receives an event with a batch of streams records
-    - you specify a batch size when setting up the trigger (up to 10k records)
-    - `too large a btach size can cause timeouts!`
-    - batches may also be split beyond Lambda's payload limit (6MB)
-- Lambda will retry the batch until it succeeds or the data expires
-    - this can stall the shard if you do not handle errors properly
-    - use more shards to ensure processing is not totally help up by errors
+Lambda code receives an event with a batch of streams records
+- you specify a batch size when setting up the trigger (up to 10k records)
+- `too large a btach size can cause timeouts!`
+- batches may also be split beyond Lambda's payload limit (6MB)  
+
+Lambda will retry the batch until it succeeds or the data expires
+- this can stall the shard if you do not handle errors properly
+- use more shards to ensure processing is not totally help up by errors
 - Lambda processes shard data synchronously
 
-### Costs, Promises and Anti-Patterns
-"Pay for what you use"
+### Costs
+Pay for what you use
 - generous free tier (1M requests/month, 400k GB-seconds compute time)
 - $.20 / million requests
 
-**Other promises**
+### *Promises*
 - High avaiilability
     - no scheduled downtime
     - retries failed code 3 times
@@ -53,17 +55,14 @@ A way to run code snippets in the cloud - serverless, continuous scaling
     - code is cached automatically
     - 15 minute max timeout
 
-**anti-patterns**
-- long-running applications
-    - use EC2 instead, or chain functions
-- dynamic websites
-    - although lambda can be used to develop 'serverless' apps that rely on client-side AJAX
-- stateful applications
-    - but you can work in dynamodb or s3 to keep track of state
+### *Anti-Patterns*
+**long-running applications** (use EC2 instead, or chain functions)  
+**dynamic websites** (although lambda can be used to develop 'serverless' apps that rely on client-side AJAX)  
+**stateful applications** (you can work in dynamodb or s3 to keep track of state)
 
-
----
 ## AWS Glue
+---
+### *Overview*
 Serverless discovery and definition of table definitions and schema
 - S3 data lakes
 - RDS
@@ -74,31 +73,29 @@ Serverless discovery and definition of table definitions and schema
 - trigger-driven, on a schedule, or on demand
 - fully-managed
 
-**Glue crawler / data catalog**
-- glue crawler scans data in s3, creates schema
+**`Glue Crawler` / `Data Catalog`**
+- `Glue Crawler` scans data in `S3`, creates schema
 - can run periodically
-- populates the glue data catalog
+- populates the `Glue Data Catalog`
     - stores only table definition
-    - original data stays in s3
+    - original data stays in `S3`
 - once cataloged, you can tread your unstructured data like it's structured
     - redshift spetrum
     - athena
     - EMR
     - quicksight  
 
-**Glue and S3 Partitions**
+**Glue & S3 Partitions**
 - Glue crawler will extract partitions based on how your s3 data is oranized
 - think up front about how you will be querying your data lake in s3
 
-
-### Glue, Hive, and ETL
+### *Glue & Hive*
 **Glue & Hive**
 - Hive lets you run SQL-like queries from EMR
 - The Glue Data Catalog can serve as a Hive 'metastore'
 - you can also import a Hive metastore into Glue
 
-`MUST KNOW ALL OF GLUE ETL`  
-**Glue ETL**
+### *Glue & ETL - MUST KNOW*
 - automatic code generation
 - Scala or Python
 - Ecryption
@@ -110,7 +107,12 @@ Serverless discovery and definition of table definitions and schema
 - Errors reported to CloudWatch
     - Could tie into SNS for notification
 
-> Glue ETL is a system that lets you automatically process and transform your data. You can do this by a graphical interface that lets you define how you want that transformation to work and it will actually do that using Apcache Spark under the hood using Scala or Python codde, fully encryptd both at rest and in transit. Can be event-driven if you want it to be or it can run on a schedule.
+> Glue ETL is a system that lets you automatically process and transform your data.
+> You can do this by a graphical interface 
+> that lets you define how you want that transformation to work 
+> and it will actually do that using Apcache Spark under the hood 
+> using Scala or Python codde, fully encryptd both at rest and in transit.
+> Can be event-driven if you want it to be or it can run on a schedule.
 
 - Transform data, Clean Data, Enrich Data (before doing analysis)
     - generate ETL code in Python or Scala, you can modify the code
@@ -121,8 +123,8 @@ Serverless discovery and definition of table definitions and schema
 - glue scheduler to schedule the jobs
 - glue triggers to automate job runs based on events
 
-**The Dynamic Frame**
-A dataframe is a collection of DynamicRecords
+**The Dynamic Frame**  
+A dataframe is a collection of DynamicRecords  
 - DynamicRecords are self-describing, have a schema
 - very much like a Spark DataFrame, but with more ETL stuff
 - Scala and Python APIs
@@ -290,7 +292,7 @@ EMR Cluster
 
 ### EMR Usage
 Transient vs Long-Running Clusters
-- Transient clubsters terminate once all steps are complete
+- Transient clusters terminate once all steps are complete
     - Loading data, processing, storing - the shut down
     - Saves money
 - Long-running clusters must be manually terminated
@@ -299,7 +301,7 @@ Transient vs Long-Running Clusters
     - Can use reserved instances on long-running clusters to save $
     - Termination protection on by default, auto-termination off
 
-- Frameowrks and applications are specified at cluster launch
+- Frameworks and applications are specified at cluster launch
 - Connect directly to master to run jobs directly
 - Or, submit ordered steps via the console
     - Process data in S3 or HDFS
@@ -307,13 +309,13 @@ Transient vs Long-Running Clusters
     - Once defined, steps can be invoked via the console
 
 ### EMR AWS Integration
-- EC2 for the instances that comprise the nodes in the cluster
-- VPC to configure the virtual network in which you launch your instances
-- S3 to store input and output data
-- CloudWatch to monitor cluster performance and configure alamrs
-- IAM to configure permissions
-- CloudTrail to audit requests made to the service
-- Data Pipeline to schedule and start your clusters
+- EC2 - for the instances that comprise the nodes in the cluster
+- VPC - to configure the virtual network in which you launch your instances
+- S3 - to store input and output data
+- CloudWatch - to monitor cluster performance and configure alamrs
+- IAM - to configure permissions
+- CloudTrail - to audit requests made to the service
+- Data Pipeline - to schedule and start your clusters
 
 ### EMR Storage
 Hadoop Distributed File System (HDFS)
@@ -324,7 +326,8 @@ Hadoop Distributed File System (HDFS)
 - Hadoop tries to process data where it is stored on HDFS
 
 EMRFS: access S3 as if it were HDFS
-- allows persistent storage after cluster termination
+- allows persistent storage after cluster termination  
+
 **EMRFS Consistent View** - Optional for S3 consistency
     - Uses DynamoDB to track consistency
     - May need to tinker with read/write capacity on DynamoDB
