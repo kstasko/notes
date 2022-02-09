@@ -259,6 +259,7 @@ Transport Layer Security (TLS) encrypts in-transit (between `Athena` and `S3`)
 - ETL (use `Glue`)
 
 ### *Performance*
+
 ### *Optimizing Performance*
 - Use columnar data (ORC, Parquet)
 - Small number of large files performs better than large number of small files
@@ -269,20 +270,136 @@ Transport Layer Security (TLS) encrypts in-transit (between `Athena` and `S3`)
 ## Redshift
 ---
 ### *Overview*
+- fully-managed, petabyte scale data warehouse service
+- 10X better performance than other DW's
+    - via ML, massively parallel query execution, columnar storage
+- Designed for OLAP, not OLTP
+- cost effective
+- SQL, ODBC, JDBC interfaces
+- scale up or down on demand
+- built-in replication & backups
+- monitoring via `CLoudWatch` / `CloudTrail`
+
+**Use Cases**
+- acceleate analytics workloads
+- unified data warehouse & data lake
+- data warehouse modernization
+- analyze global sales data
+- store historical stock trade data
+- analyze ad impressions & clicks
+- aggregate gaming data
+- analyze social trends
+
+**Architecture**  
+- `cluster` - the core infrastrucute component of an `Amazon Redshift` data ware house 
+    - composed of a `leader node` and one or more compute nodes ( `can have up to 128 compute nodes` )
+    - each cluster can contain one or more databases
+- `leader node` - manages communication with the client programs and with the compute nodes. 
+    - receives all the queries from client applications, passes the queries and develops `execution plans`
+        - `execution plans` - an ordered set of steps to process queries
+- `compute node` - responsible for executing the steps specified in the execution plans that it is getting from the leader node and transmitting data mong themselves to serve those queries
+    - each compute node has its own dedicated CPU, memory and attached disk storage which are determined by the node type you choose
+- `Node Types`
+    - Dense Storage - allows you to create a very large data warehouse using hard disk drives
+        - sizes ( *extra-large* & *8xl* )
+        - 16 TB of available storage
+    - Dense Compute - to create very high performance data warehouses using fast CPUs large amounts of RAM and SSD
+        - much much much more powerful and storage comparatively
+
+> Every `compute node` is divided into `slices` and a portion of the nodes memory and
+> disk space is going to be allocated to each slice where it processes a portion of the workload
+> assigned to that node. 
+> The number of slices per node is determined by the node size of the cluster.
 
 ### *Spectrum*
+- query exabytes of unstructured data in `S3` without loading
+- limitless concurrency
+- horizontal scaling
+- separate storage & compute resources
+- wide variety of data formats
+- support of Gzip and Snappy compression
+
+> Much the same way that `Athena` could use the `AWS Glue Data Catalog` to make tables on top of your `S3` data,
+> `Spectrum` can do the same thing, it is just that instead of having this console based query SQL engine in `Athena` it actually just looks like another table in your redshift database.
 
 ### *Performance Testing*
+- massively parallel processing (MPP)
+- columnar data storage
+- column compression
+- when loading to the cluster, use the COPY command ( automatically applies compression )
+
+> `Redshift` uses a block size of ` megabyte which is more efficient and further reduces the number of IO requests needed to perform any database loading or other operations that are part of a query execution.
 
 ### *Durability*
+- replication within cluster
+- backup to `S3` - asynch replicated to another region
+- automatd snapshots
+- failed drives / nodes automatically replaced
+- limited to a single availability zone 
 
 ### *Scaling*
+- vertical and horizontal scaling on demand
+- during scaling:
+    - a new cluster is created while your old one remains available for reads
+    - CNAME is flipped to new cluster ( a few minuts of downtime )
+    - data moved in parallel to new compute nodes
 
 ### *Distribution Styles*
+> the two primary golas of data distribution are to distribute the workload uniformly among the nodes in the cluster 
+> and to minimize data movement during query execution
+
+- `AUTO` - redshift configures it out based on size of data
+- `EVEN` - rows distributed across slices in round-robin
+    - appropriate when a table does not participate in joins or when the there is not a clear choice between key distributions or all distribution
+- `KEY` - rows distributed based on one column
+    - useful if you going to be doing queries based on a specific column in your data 
+- `ALL` - entire table is copied to ever node
+    - it takes much longer to load, update or insert data 
+    - meant for tables that are not updated frequently or extensively as the cost of redistribution is low
 
 ### *Sort Keys*
+- rows are stored on disk in sorted order based on the column you designate as a sort key
+- like an index
+- makes for fast range queries
+- choosing a sort key ( recency? filtering? joins? )
+- `single sort-key` - using a single column, a single value, to sort the data
+- `compound sort-key` ( default ) - made up of all the columns listed in the sort key definition in the order they are listed in.
+    - most useful when a query's filter applies conditions such as filters and joins that use a prefix of the sort keys  
+- `interleaved sort-key` - gives equal weights to a each column or subset of columns in the sort key
 
 ### *Data Flows & the COPY Command*
+**Importing / Exporting Data**
+- COPY command 
+    - parallelized; efficient
+    - From `S3`, `EMR`, `DynamoDB`, remote hosts
+    - `S3` requires a manifest file and IAM role
+- UNLOAD command
+    - unload from a table into files in `S3`
+- enhanced `VPC` routing
+
+**COPY command**
+- use COPY to load large amounts of data from outside of `Redshift`
+- if your data is already in `Redshift` in another table...
+    - use INSERT INTO ... SELECT
+    - or CREATE TABLE AS
+- COPY can decrypt data as it is loaded from `S3`
+    - hardware-accelerated SSL used to keep it fast
+- Gzip, Izop and bzip2 compression supported to speed it up further
+- automatic compression option
+    - analyzes data being loaded and figures out optimal compression scheme for storing it
+- `special case`: narrow tables ( lots of rows, few columns )
+    - load with a sinlge COPY transaction if possible
+    - otherwise hiddne metadata columns consume too much space
+
+**Redshift copy grants for cross-region snapshot copies**  
+- let's say you have a KMS-encrypted `Redshift Cluster` and a snapshot of it
+- you want to copy that snapshot to another region for backup
+- in the destination AWS region:
+    - create KMS key if you do not have one already
+    - specify a unique name for your snapshot copy grant
+    - specify the KMS key ID for which you are creating the copy grant
+- in the source AWS region:
+    - enable copying of snapshots tot eh copy grant you just created
 
 ### *Integration*
 
@@ -292,6 +409,24 @@ Transport Layer Security (TLS) encrypts in-transit (between `Athena` and `S3`)
 
 ### *Anti-Patterns*
 
-### *Resizing & new Features*
+### *Resizing*
+- elastic resize
+    - quickly add or remove nodes of same type 
+        ( it can change node types, but not without dropping connections - it creates a whole new cluster )
+    - cluster is down for a few minutes
+    - tries to keep connections open across the downtime
+    - limited to doubling or halving for some dc2 and ra3 node types
+- classic resize
+    - change node type and / or number of nodes
+    - cluster is read-only for hours to days
+- snapshot , restore , resize
+    - used to keep cluster available during a classic resize
+    - copy cluster, resize new cluster 
 
 ### *Security Concerns*
+- using a Hardware Security Module ( HSM )
+    - must use a client and server certificate to configure a trusted connection between `Redshift` and the HSM
+    - if migrating an unencrypted clustr to an HSM-encrypted cluster, you must create the new encrypted cluster and then move data to it
+- defining access privileges for user or group
+    - use the GRANT or REVOKE commands in SQL
+    - example: grant select on table foo to bob;
