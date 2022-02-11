@@ -405,7 +405,7 @@ Transport Layer Security (TLS) encrypts in-transit (between `Athena` and `S3`)
 
 ### *WLM*
 
-### *Vacuum*
+### *Vacuum*`
 
 ### *Anti-Patterns*
 
