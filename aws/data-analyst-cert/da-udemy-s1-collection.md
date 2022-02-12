@@ -18,44 +18,46 @@ Data Retention
 
 
 ### Kinesis Producers (KPL)
-- `Kinesis Agent` is **an agent that runs on servers**
-- `Kinesis Producer SDK` uses PutRecords()  
-   - Use Case: low throughput, higher latency, simple API, AWS lambda  
-   - `Managed AWS sources for Kinesis Data Streams`
+- `Kinesis Agent` - an agent that runs on servers
+- `Kinesis Producer SDK` - PutRecords()  
+   - use case: low throughput, higher latency, simple API, AWS lambda  
+   - Managed AWS sources for Kinesis Data Streams
       - Cloudwatch Logs
       - AWS IoT 
       - Kinesis Data Analytics
   
-> Whenever you see on the exam 'we need to send data `asynchronously` to Kinesis Data Streams' usually KPL is the way to do it  
+> Whenever you see on the exam 'We need to send data `asynchronously` to `Kinesis Data Streams`' usually KPL is the way to do it  
   
-`KPL Batching (both turned on by default) - increase throughput and decrease cost`
-- `collect records and write to multiple shards in the same PutRecords() call`
-- `Aggregate - increased latency`
-    - `Capability to store multiple records in one record (go over 1000 records per second limit)`
-    - `increase payload size and improve throughput (max 1MB/s limit)`
-- When not to use KPL:
-    - application that cannot tolerate this additional delay may need to use the SDK
+`KPL Batching` ( both turned on by default ) - increase throughput and decrease cost  
+- collect records and write to multiple shards in the same PutRecords() call
+- `Aggregate` - increased latency
+    - Capability to store multiple records in one record ( go over 1000 records per second limit )
+    - increase payload size and improve throughput (max 1MB/s 
+    limit)
+
+When not to use KPL:  
+- application that cannot tolerate this additional delay may need to use the SDK
 
 ### Kinesis Consumers
-- *Apache Spark* is able to read from Kinesis Data Streams as a consumer
-- maximum of 5 GetRecords() calls per shard per second = `200 ms latency on your data`
-- *Kinesis Client LIbrary (KCL)*
-    - if you get an expired iterator exception that means something is going on in your KCL library. It means you need to increase the WCU because Dynamo is not fast enough
-        * `ExpiredIteratorException` => Increase WCU in dynamo
+- `Apache Spark` is able to read from `Kinesis Data Streams` as a consumer
+    - maximum of 5 GetRecords( ) calls per shard per second = `200 ms latency on your data`
+- `Kinesis Client Library` ( KCL )
+    - if you get an expired iterator exception that means something is going on in your KCL library. To avoid this, increase the WCU because Dynamo is not fast enough
+        * `ExpiredIteratorException` = > Increase WCU in dynamo
 
 ### Kinesis Scaling
-> A producer is sending data to a kinesis stream with the correct partition key, yet your consumer received the data out of order
+> A `Producer` is sending data to a `Kinesis Data Stream` with the correct partition key, yet your consumer received the data out of order
 > ... a reason for that would be resharding.  
 
-- when you do a kinesis resharding, you can read it straight from the child shards after the resharding. However if you have not read all the data from the parent shard you may read the data out of order for a particular hash key
-- after a reshard, you need to ensure your consumer application logic reads the parent shard entirely until there are no new records from the parent  
-- `Scale resharding cannot be done in parallel and resharding takes a few seconds per shard`  
-   - `for 1000 shards to double to 2000, it takes about 8.3 hours`  
-   - 
+- when you do a `Kinesis Resharding`, you can read it straight from the child shards after the resharding. However if you have not read all the data from the parent shard you may read the data out of order for a particular hash key
+- after a `Reshard` - ensure your consumer application logic reads the parent shard entirely until there are no new records from the parent  
+- Scale resharding cannot be done in parallel and resharding takes a few seconds per shard  
+   - for 1000 shards to double to 2000, it takes about 8.3 hours  
+
 ## Kinesis Data Streams 
 ---
-**Handling Duplicates for Producers**
-- producer retries can create duplicates due to network timeouts
+**Handling Duplicates for Producers**  
+- `Producer` retries can create duplicates due to network timeouts
    - `fix is to embed a unique record ID in the data to be able to deduplicate based on that surrogate key`
 **Handling Duplicates for  Consumers**
 consumer retries happen when record processors restart:
@@ -190,28 +192,29 @@ Provides a dedicated private connection from the remote network into your VPC
 
 ### Snow Family
 ---
+> if it takes more than a week to upload data, consider the snow family
+
 Offline devices that allow you to perform data migrations
-* if it takes more than a week to upload data, consider the snow family
 
-#### Snow Edge
-* storage - 80 terrabytes
-* migration size - up to petabytes offline
-* storage clustering - up to 15 nodes
+#### `Snow Edge`
+- storage - 80 terrabytes
+- migration size - up to petabytes offline
+- storage clustering - up to 15 nodes
 
-#### Snow Cone
-* storage - 8 terrabytes
-* migration size - up to 24 terrabytes offline
-* datasync agent - pre installed
+#### `Snow Cone`
+- storage - 8 terrabytes
+- migration size - up to 24 terrabytes offline
+- datasync agent - pre installed
 
-#### Snowmobile
-* storage - 100 petabytes
-* migration size - up to exabytes offline
+#### `Snowmobile`
+- storage - 100 petabytes
+- migration size - up to exabytes offline
 
 ### Management Streaming for Apache Kafka (MSK)
 ---
-* kafka is an alternative to kinesis 
-* can create custom configurations for your cluster
-    * `can customize the cluster to receive messages from 1MB up to 10MB!`
+- kafka is an alternative to kinesis 
+- can create custom configurations for your cluster
+    - `can customize the cluster to receive messages from 1MB up to 10MB!`
 
 #### **Security**
 Encryption

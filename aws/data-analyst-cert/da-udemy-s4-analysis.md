@@ -98,7 +98,7 @@ any structured JSON data works. Every document has a unique ID and a type
 > But if you see something on the exam about `Elasticsearch 6` still,
 > types still might be a thing in that context.  
 
-### *An index is split into `shard`*  
+### *An Index is split into Shard*  
 Documents are `hashed` to a particular `shard`
 - each `shard may be on a different `node` in a `cluster`
 - every `shard` is a self-contained `Lucene` index of its own
