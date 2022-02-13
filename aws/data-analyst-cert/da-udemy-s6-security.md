@@ -222,7 +222,68 @@ Three Types of Customer Master Keys ( CMK )
     - `CloudWatch` encryption mode
     - job bookmarks encryption mode
 
-### *
+**VERY IMPORTANT**
+### *EMR*
+- using `Amazon EC2` key pair for SSH credentials
+- attach `IAM` roles to `EC2 instances forL
+    - proper `S3` access
+    - for `EMRFS` requests to `S3`
+    - `DynamoDB` scans through `Hive`
+- `EC2` Security Groups
+    - one for master node
+    - another one for cluster node (core noe or task node )
+- `Kerberos` authentication ( provide authentication from Active Directory )
+- `Apache Ranger` : Centralized Authorization ( RBAC - Role Based Access ) - setup on external `EC2`
+
+### *EMR Encryption*
+- at-rest data encryption for `EMRFS`:
+    - encryption in `S3`: `SSE-S3`, `SSE-KMS`, Client-side encryption
+    - encryption at Local Disk
+- at-rest data encryption for local disks
+    - open-source HDFS encryption
+    - EC2 nstance Store encryption - NMe encryption or LUKS encryption
+    - EBS volumns 
+        - EBS encryption ( KMS ) - **works with root volume**
+        - LUKS encryption - does not work with root
+- in-transit encryption
+    - node to node communication
+    - for `EMRFS` trafic between `S3` and cluster nodes
+    - TLS encryption
+
+### *ElasticSearch / Opensearch*
+- `VPC` provides network isolation
+- `Elasticsearch policy to manage security further
+- data security by encrypting data at-rest using `KMS`
+- encryption in-transit using SSL
+- `IAM` or `Cognito` based authentication
+    - `Cognito` allows end-users to login to `Kibana` through enterprise identity providers such as Microsoft Active Directory 
+
+### *Redshift*
+- `VPC` provides network isolation
+- cluster security groups
+- encryption in flight using the JDBC driver enabled with SSL
+- encryption at rest usign `KMS` or an `HSM device` ( establish a connection )
+- supports `S3 SSE` using default managed key
+- uses `IAM Roles`
+- to access other AWS resources - must be referenced in the COPY or UNLOAD command ( alternaticely paste access key and secret key creds )
+
+### *Athena*
+- `IAM` policies to control access to the service
+- data is in the `S3:IAM` policies, bucket policies & ACLs
+- encryption of data according to `S3` standards: `SSE-S3`, `SSE-KMS`, `CSE-KMS`
+- encryption in transit using TLS between `Athena` & `S3` and JDBC
+- fine grained access ussing the `AWS Glue Data Catalog`
+
+### *Quicksight*
+- standard edition
+    - `IAM users`
+    - email based accounts
+- enterprise edition
+    - Active Directory
+    - federated login
+    - supports MFA
+    - encryption at rest and in SPICE 
+- row level security to control which users can see which rows
 
 ## STS
 ---
@@ -246,3 +307,64 @@ Federation with third party providers / `Cognito`
 - define which accounts can access this `IAM Role`
 - uses `AWS STS` to retrieve credentials and impersonate the `IAM ROle` you have access to ( AssumeRole API )
 - temporary credentials can be valid between 15 minutes to 1 hour
+
+## Identity Federation
+---
+### *Overview*
+- federation lets users outside of AWS to assume temporary roles for access AWS resources
+- these users assume identity provided access roles
+- federation assumes a form of 3rd party authentication
+    - LDAP, Microsoft Active Directory, Single Sign On, Open ID, Cognito
+- using federation, you do not need to create IAM users ( user management is outside of AWS )
+
+**SAML Federation**
+- to integration Active Directory / ADFS with AS ( or any SAML 2.0 )
+- provides access to AWS console or CLI ( through temporary creds )
+- no need to create an `IAM User` for each of your employees
+
+**Custom Identity Broker Applicaiton**
+- use only if identity provided is not compatible with SAML 2.0
+- the identity broker must determine the appropriate `IAM Policy`
+
+**AWS Cognito - Federated Identity Pools**
+- Goal - provide access to AWS resources from the client side
+- How:
+    - log in to federated identity provided - or remain anonymous
+    - get temporary AWS credentials back from the Federated Identity Pool
+    - These credentials come with a pre-defined `IAM Policy` stating their permissions
+- Note:
+    - Web Identity Federation is an alternative to using Cognito but AWS recommends against it
+- Example:
+    - provide ( temporary ) access to write to `S3 Bucket` using facebook login 
+
+## Policies-advanced
+---  
+- ${ aws:username } : to restrict users to tables / buckets
+- ${ aws:principaltype } : account, user, federated, or assumed role
+- ${ aws:PrincipalTag/department } : to restrict using Tags 
+- ${ aws:FederatedProvider } : which IdP was used for the user ( Cognito, Amazon.. )
+- ${ wwww.amazon.consumer:user_id }, ${ cognito-identity.amazonaws.com:sub }
+
+## CloudTrail
+---
+- provides governance, compliance and audit for your AWS Account
+- `CloudTrail` is enabled by default
+- get a history of events / API calls made within your AWS account by: ( Console, SDK, CLI, AWS Services )
+- can put logs from `CloudTrail` into `CloudWatch Logs`
+- shows the past 90 days of activity
+- the default UI only shows Create, Modify or Delete events
+- CloudTrail Trail
+    - get a detailed list of all the events you choose
+    - ability to store these events in `S3` for further analysis
+    - can be region specific or global
+- `CloudTrail Logs have `SSE-S3` encryption when placed into `S3`
+
+## VPC Endpoints
+---  
+- endpoints allow you to connect to AWS Services using a private network instead of the public www network
+- they scale horizontally and are redundant
+- they remove the need of IGW, NAT to access AWS services
+- `Gateway`: provisions a target and must be used in a route table ( ONLY S3 & DynamoDB )
+- `Interface`: provisions an ENI ( private IP address ) as an entry point ( must attach security group )
+    - also called `VPC PrivateLink`
+- 
