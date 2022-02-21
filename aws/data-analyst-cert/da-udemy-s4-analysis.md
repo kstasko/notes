@@ -100,7 +100,7 @@ any structured JSON data works. Every document has a unique ID and a type
 
 ### *An Index is split into Shard*  
 Documents are `hashed` to a particular `shard`
-- each `shard may be on a different `node` in a `cluster`
+- each `shard` may be on a different `node` in a `cluster`
 - every `shard` is a self-contained `Lucene` index of its own
 
 ### *Amazon Opensearch Service*
@@ -131,7 +131,7 @@ Documents are `hashed` to a particular `shard`
 - ad-hoc data querying - `Athena` is better
 
 ### *Index Management*
-**cold / warm/ ultrawarm / hot storage**
+**cold / warm / ultrawarm / hot storage**
 - standard data nodes use `hot` storage - instance stores or EBS volumes / fastest performance
 - `ultrawarm` (or warm) storage uses `S3` & caching
     - best for indices with few writes ( like log data / immutable data )
@@ -234,7 +234,7 @@ Cross-region concerns:
 Pay-as-you-go
 - $5 per TB scanned
 - Successful or cancelled queries count, `failed queries do not`
-- No charge for DDL (CREATE/ALTER/DROP, etc)
+- No charge for DDL ( CREATE / ALTER / DROP, etc)
 
 `Save up to 30% - 90% by using columnar formats & get better performance`
 - ORC, Parquet
@@ -278,10 +278,10 @@ Transport Layer Security (TLS) encrypts in-transit (between `Athena` and `S3`)
 - SQL, ODBC, JDBC interfaces
 - scale up or down on demand
 - built-in replication & backups
-- monitoring via `CLoudWatch` / `CloudTrail`
+- monitoring via `CloudWatch` / `CloudTrail`
 
 **Use Cases**
-- acceleate analytics workloads
+- accelerate analytics workloads
 - unified data warehouse & data lake
 - data warehouse modernization
 - analyze global sales data
@@ -291,13 +291,13 @@ Transport Layer Security (TLS) encrypts in-transit (between `Athena` and `S3`)
 - analyze social trends
 
 **Architecture**  
-- `cluster` - the core infrastrucute component of an `Amazon Redshift` data ware house 
+- `cluster` - the core infrastructure component of an `Amazon Redshift` data warehouse 
     - composed of a `leader node` and one or more compute nodes ( `can have up to 128 compute nodes` )
     - each cluster can contain one or more databases
 - `leader node` - manages communication with the client programs and with the compute nodes. 
     - receives all the queries from client applications, passes the queries and develops `execution plans`
         - `execution plans` - an ordered set of steps to process queries
-- `compute node` - responsible for executing the steps specified in the execution plans that it is getting from the leader node and transmitting data mong themselves to serve those queries
+- `compute node` - responsible for executing the steps specified in the execution plans that it is getting from the leader node and transmitting data amongst themselves to serve those queries
     - each compute node has its own dedicated CPU, memory and attached disk storage which are determined by the node type you choose
 - `Node Types`
     - Dense Storage - allows you to create a very large data warehouse using hard disk drives
@@ -399,15 +399,66 @@ Transport Layer Security (TLS) encrypts in-transit (between `Athena` and `S3`)
     - specify a unique name for your snapshot copy grant
     - specify the KMS key ID for which you are creating the copy grant
 - in the source AWS region:
-    - enable copying of snapshots tot eh copy grant you just created
+    - enable copying of snapshots to the copy grant you just created
 
 ### *Integration*
+- `S3`
+- `DynamoDB`
+- `EMR` / `EC2`
+- `Data Pipeline`
+- `Database Migration Service` 
 
-### *WLM*
+### *Workload Management ( WLM )*
+- prioritize short, fast queries vs long, slow queries
+- query queues
+- via console, CLI or API
 
-### *Vacuum*`
+**Concurrency Scaling**
+- automatically adds cluster capacity to handle increase in concurrent read queries
+- support virtually unlimited concurrent users & queries
+- `WLM` queues manage which queries are sent to the concurrency scaling cluster
+
+**Automatic WLM**
+- creatues up to 8 queues
+- default 5 queues with even memory allocation
+- large queries ( e.g. big hash joins ) -> concurrency lowered
+- small queries ( e.g. inserts, scans, aggregations ) -> concurrency raised
+- configuring query queues
+    - priority
+    - concurrrency scaliing mode
+    - user groups
+    - query groups
+    - query monitoring rules - allow you to define metrics based performance boundaries for WLM cues
+
+**Manual WLM**
+- one default queue with concurrency level of 5 ( 5 queries at once )
+- Superuser queue with concurrency level 1
+- define up to 8 queues, up to concurrency level 50
+    - each can have defined concurrency scaling mode, concurrency level, user groups, query groups,
+     memory, timeout, query monitoring rules
+
+**Short Query Acceleration ( SQA )**
+- prioritize short-running queries over longer-running ones
+- short queries run in a dedicated space, won't wait in queue behind long queries
+- can be used in place of WLM queues for short queries
+- works with:
+    - CREATE TABLE AS ( CTAs )
+    - Read-only queries ( SELECT statements )
+- uses machine learning to predict a query's exectution time
+- can configure how many secodns is 'short'
+
+### *VaCUUM command*
+- recovers space from deleted rows
+- VACUUM FULL - resort rows, reclaim space from delete rows
+- VACUUM DELETE ONLY -  same as full except that it skips the sorting
+- VACUUM SORT ONLY - sorts table but does not reclaim space
+- VACUUM REINDEX - used to reinitialize interleaved indexes
 
 ### *Anti-Patterns*
+- small data sets ( use RDS )
+- OLTP ( use RDS or DynamoDB )
+- unstructured data ( ETL first with EMR, etc )
+- BLOB data ( store references to large binary files in S3 )
 
 ### *Resizing*
 - elastic resize

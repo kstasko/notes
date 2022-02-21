@@ -4,9 +4,11 @@
 
 ## AWS Services Integrations
 ---  
+Watch this lecture, many times......
 
 ## Instance Types for Big Data
 ---  
+
 
 ## EC2 for Big Data
 ---  

@@ -108,7 +108,7 @@ You can stream CloudWatch logs into:
 - sends S3 key to SQS queue and tells consumers where to download the larger than 256kB file
 
 ### *Limits*
-- `FIFO supports up to 3000 message per second (using batching)`
+- `FIFO supports up to 3000 mess age per second (using batching)`
 - maximum message size is 256kB
 
 ### SQS vs Kinesis
@@ -120,8 +120,8 @@ You can stream CloudWatch logs into:
 ### *Overview*
 > I would say the most important things [to know] is going to be the thing registry to know that there is security, the IoT message broker, the rules engine and the device shadow.  
 
-`**device gateway**` - enables your device to securely communicate
-`**rules engine**` - contains a bunch of rules that you can define allowing you to modify the behavior of your devices based on them. `It alls us to send data to many different targets.`
+`device gateway` - enables your device to securely communicate
+`rules engine` - contains rules that you can define allowing you to modify the behavior of your devices based on them. `It allows us to send data to many different targets.`
 `**device shadow**` - literally a shadow of my device. If your device is disconnected from the network, the shadow helps tell it what rule/action to follow to be back up to date
 
 ### *Components Deep Dive*
@@ -159,35 +159,35 @@ You can stream CloudWatch logs into:
 
 ### Database Migration Service
 ---
-* resilient and self-healing  
-* source database remains available during the migration
-* continuous data replication using CDC
+- resilient and self-healing  
+- source database remains available during the migration
+- continuous data replication using CDC
 
-#### **Schema Conversion Tool
-* converts the databases schema from one to another
+#### Schema Conversion Tool
+- converts the databases schema from one to another
 
 ### Direct Connection
 ---
 Provides a dedicated private connection from the remote network into your VPC  
-* will need to set up virtual private gateway on your VPC  
-* access public resources (s3 and ec2) while on this connection as well
-* data in transit is NOT encrypted
-    * to do this you will have to set up a VPN alongside DX
+- will need to set up virtual private gateway on your VPC  
+- access public resources (s3 and ec2) while on this connection as well
+- data in transit is NOT encrypted
+    - to do this you will have to set up a VPN alongside DX
 
 #### Direct Connect Gateway
-* used when you want to connect one or more VPCs in different regions
+- used when you want to connect one or more VPCs in different regions
 
 #### **Connection Types**
-* dedicated connection - 1Gb/s to 10 Gb/s capacity  
-    * physical ethernet port per dedicated customer  
-* hosted connection - up to 10 Gb/s
+- dedicated connection - 1Gb/s to 10 Gb/s capacity  
+    - physical ethernet port per dedicated customer  
+- hosted connection - up to 10 Gb/s
 > in the exam they will ask you questions around 'we want to transfer some data within a week and we want it to be fast.' So  an answer CANNOT be direct connect
 
 #### **High Resiliency**
 > Two corporate data centers and have two different direct conncect locations, and this gives us some redundnacy
 
 #### **Maximum Resiliency**
-> setup again two direct connect locations, but this time each direc connect locations will have two connections independence to give you max resiliency. 
+> setup again two direct connect locations, but this time each direct connect locations will have two connections independence to give you max resiliency. 
 > So in this case, we have four connections across two locations going into AWS. 
 
 ### Snow Family
@@ -206,28 +206,29 @@ Offline devices that allow you to perform data migrations
 - migration size - up to 24 terrabytes offline
 - datasync agent - pre installed
 
-#### `Snowmobile`
+#### `Snow mobile`
 - storage - 100 petabytes
 - migration size - up to exabytes offline
 
-### Management Streaming for Apache Kafka (MSK)
+## Management Streaming for Apache Kafka (MSK)
 ---
-- kafka is an alternative to kinesis 
+- `Kafka` is an alternative to `Kinesis` 
 - can create custom configurations for your cluster
     - `can customize the cluster to receive messages from 1MB up to 10MB!`
 
-#### **Security**
+### **Security**
 Encryption
-* optional in-flight using TLS between the brokers  
-* optional in-flight with TLS between the clients and brokers
-* at rest for your EBS volumes using KMS  
-Network Security  
-* authorize specific security groups for your Apache Kafka clients
-`Authentication and Authorization `
-* `define who can read/write to which topics  `
-* `Mutual TLS (AuthN) + Kafka ACLs (AuthZ)  `
-* `SASL/SCRM (AuthN) + Kafka ACLs (AuthZ)  `
+- optional in-flight using TLS between the brokers  
+- optional in-flight with TLS between the clients and brokers
+- at rest for your EBS volumes using KMS  
 
-> one thing you need to know is that Kafka ACLs for mutual TLS and SASL/SCRAM `cannot` be managed using IAM polciies. They have to be defined from within your Kafka cluster
+Network Security  
+- authorize specific security groups for your Apache Kafka clients
+`Authentication and Authorization `
+- `define who can read / write to which topics  `
+- `Mutual TLS (AuthN) + Kafka ACLs (AuthZ)  `
+- `SASL/SCRM (AuthN) + Kafka ACLs (AuthZ)  `
+
+> Kafka ACLs for mutual TLS and SASL/SCRAM `cannot` be managed using IAM polciies. They have to be defined from within your Kafka cluster
 
 Come back and make table of differences between MSK vs Kinesis

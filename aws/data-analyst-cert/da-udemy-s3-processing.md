@@ -170,7 +170,7 @@ Apache Spark transformations (example: K-means)
 
 ### Development Endpoints, Running ETL Jobs with Bookmarks
 **Development Endpoints**
-- Develop ETL scrpts using a notebook
+- Develop ETL scripts using a notebook
     - then create an ETL job that runs your script
 - Endpoint is in a VPC controlled by security groups, connect via:
     - Apache Zeppelin on your local machine
@@ -354,8 +354,8 @@ Elastic Block Store for HDFS
 - Core nodes can also be added or removed
     - But removing risks data loss
 
-> generally speaking if you need a temporary increase in processing capcity adding tasks nodes is a good way to do tha.
-> If you need to add a storage capcity as well on HDFS you can resize a core node.
+> generally speaking if you need a temporary increase in processing capacity adding tasks nodes is a good way to do that.
+> If you need to add a storage capacity as well on HDFS you can resize a core node.
 > You can also add and remove core nodes on the fly just like you can with task nodes.
 
 Managed Scaling
@@ -380,7 +380,7 @@ Maybe come back to this slide
 ### Apache Spark Intro
 - distributed processing framework for big data
 - in-memory caching, optimized query execution
-- supports Java, Scala, Python, & R
+- supports Java, Scala, Python & R
 - Supports code reuses across
     - Batch processing
     - Interactive Queries
@@ -397,8 +397,8 @@ Maybe come back to this slide
 > The important thing to know is that Hive basically exposes SQL interfaces to your underlying data stored on your EMR cluster.
 
 Why Hive
-- uses familiar SQL syntax (HiveQL)
-- Scalable - works with 'big data' (really most appropriate for data warehouse applications)
+- uses familiar SQL syntax ( HiveQL )
+- Scalable - works with 'big data' ( really most appropriate for data warehouse applications )
 - Easy OLAP queries
 
 The Hive Metastore
@@ -419,17 +419,17 @@ External Hive Metastores
 > basically a higher level alternative to writing MapReduce code not quite SQL
 
 ### HBASE on EMR
-- non-relational, petabyte-scale datbase
+- non-relational, petabyte-scale database
 - based on Google's BigTable, on top of HDFS
 - in-memory
 - hive integration
 
 *Sounds a lot like DynamoDB*  
-- both are NoSQL datbases inteded for the same sort of things
+- both are NoSQL datbases intended for the same sort of things
 - but if you're all-in with AWS anyhow, DynamoDB has advantages
     - fully managed
-    - more integration with other AWS services
-    - glue integration
+    - more integrations with other AWS services
+    - Glue integration
 - HBase has some advantages though:
     - efficient storage of sparse data
     - appropriate for high frequency counters (consistent reads & writes)
@@ -475,7 +475,7 @@ Spark, Python, JDBC, HBase, Elasticsearch + more
 **EMR Notebook**
 - Similar concept to Zeppelin with more AWS Integration
 - Notebooks backed up to S3
-- `Provision clusters fro the notebook`
+- `Provision clusters from the notebook`
 - Hosted inside a VPC
 - Accessed only via AWS console
 
@@ -564,7 +564,7 @@ Block public access
 a web service that helps you relibaly process and move data between different AWS compute and storage services at specified intervals.
 
 - destinations include S3, RDS, DynamoDB, Redshift and EMR
-- Manages task dependencies
+- manages task dependencies
 - retried and notifies on failures
 - cross-region pipelines
 - precondition checks
