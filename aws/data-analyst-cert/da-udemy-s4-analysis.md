@@ -8,7 +8,7 @@
 > another system for querying streams of data continuously, very similar in spirit to `Spark Streaming`
 
 **Inputs**
-- `Kinesis Data Streams` or 
+- `Kinesis Data Streams` 
 - `Kinesis Data Firehose`
 - Optionally can store `reference table/data` in `S3`
 
@@ -16,10 +16,10 @@
 - inexpensive way to 'join' data for quick lookups
 
 **Real-time Analytics**
-- Operates on fixed time periods or windows or time
+- Operates on fixed time periods, windows or time
 
 **Output**
-- `Kinesis Data Firehose` or 
+- `Kinesis Data Firehose` 
 - `Kinesis Data Streams`
 
 **KDA & `Lambda`**
@@ -29,19 +29,19 @@
     - Translating to different formats
     - Transforming and enriching data
     - Encryption
-- Opens up access to other services & destinations (S3, DynamoDB, Aurora, Redshift, SNS, SQS, Cloudwatch)
+- Opens up access to other services & destinations (`S3`, `DynamoDB`, `Aurora`, `Redshift`, `SNS`, `SQS`, `Cloudwatch`)
 
 **KDA & `Apache Flink`**
 > just know it's an open-source framework for processing data streams
 
-- Formerly Kindesis Data Analytics for Java
+- Formerly `Kinesis Data Analytics for Java`
     - KDA always used Flink under the hood
     - Now supports Scala as well as Java  
 
 - KDA integrates Flink with AWS  
-    - Instead of SQL, you can develop your own Flink application from scratch and load it into KDA via S3
+    - Instead of SQL, you can develop your own Flink application from scratch and load it into KDA via `S3`
 
-**Common Use-cases**
+**Common use-cases**
 - Streaming ETL
 - Continuous metric generation
 - Responsive analytics
@@ -71,11 +71,11 @@
 ## Elasticsearch / OpenSearch
 ---  
 ### *Overview*
-- a fork of Elasicsearch & Kibana
+- a fork of `Elasicsearch` & `Kibana`
 - a search engine
 - an analysis tool
-- a visualization tool ( Dashboards = Kibana )
-- a data pipeline - `Kinesis` replaces Beats & Logstash
+- a visualization tool ( Dashboards = `Kibana` )
+- a data pipeline - `Kinesis` replaces `Beats` & `Logstash`
 
 > Fundamentally, `OpenSearch` is a scalable version of `Lucene` and
 > is distributed horizontally across many nodes in a cluster
@@ -90,8 +90,8 @@
 ### *OpenSearch Concepts*
 - `Documents` - things you are searching for. They can be more text -
 any structured JSON data works. Every document has a unique ID and a type
-- `Types` - defines the schema and mappng shared by documents that represent the same sort of thing. (being deprecated)
-- `Indices` - an index powers search into all documents within a collection of types. THey contain inverted indices taht let you search across everything within them at once.
+- `Types` - defines the schema and mapping shared by documents that represent the same sort of thing. ( being deprecated )
+- `Indexes` - an index powers search into all documents within a collection of types. THey contain inverted indices taht let you search across everything within them at once.
 
 > `Types` are going to be a thing of the past soon.
 > So you really want to think about `Documents` & `Indexes`. 
@@ -266,7 +266,6 @@ Transport Layer Security (TLS) encrypts in-transit (between `Athena` and `S3`)
 - Use partitions
     - If adding partitions after the fact, use `MCSK REPAIR TABLE` command
 
-
 ## Redshift
 ---
 ### *Overview*
@@ -320,7 +319,8 @@ Transport Layer Security (TLS) encrypts in-transit (between `Athena` and `S3`)
 - support of Gzip and Snappy compression
 
 > Much the same way that `Athena` could use the `AWS Glue Data Catalog` to make tables on top of your `S3` data,
-> `Spectrum` can do the same thing, it is just that instead of having this console based query SQL engine in `Athena` it actually just looks like another table in your redshift database.
+> `Spectrum` can do the same thing, it is just that instead of having this console based query SQL engine in `Athena` 
+> it actually just looks like another table in your redshift database.
 
 ### *Performance Testing*
 - massively parallel processing (MPP)
@@ -333,7 +333,7 @@ Transport Layer Security (TLS) encrypts in-transit (between `Athena` and `S3`)
 ### *Durability*
 - replication within cluster
 - backup to `S3` - asynch replicated to another region
-- automatd snapshots
+- automated snapshots
 - failed drives / nodes automatically replaced
 - limited to a single availability zone 
 
@@ -341,11 +341,11 @@ Transport Layer Security (TLS) encrypts in-transit (between `Athena` and `S3`)
 - vertical and horizontal scaling on demand
 - during scaling:
     - a new cluster is created while your old one remains available for reads
-    - CNAME is flipped to new cluster ( a few minuts of downtime )
+    - CNAME is flipped to new cluster ( a few minutes of downtime )
     - data moved in parallel to new compute nodes
 
 ### *Distribution Styles*
-> the two primary golas of data distribution are to distribute the workload uniformly among the nodes in the cluster 
+> the two primary goals of data distribution are to distribute the workload uniformly among the nodes in the cluster 
 > and to minimize data movement during query execution
 
 - `AUTO` - redshift configures it out based on size of data
@@ -389,7 +389,7 @@ Transport Layer Security (TLS) encrypts in-transit (between `Athena` and `S3`)
     - analyzes data being loaded and figures out optimal compression scheme for storing it
 - `special case`: narrow tables ( lots of rows, few columns )
     - load with a sinlge COPY transaction if possible
-    - otherwise hiddne metadata columns consume too much space
+    - otherwise hidden metadata columns consume too much space
 
 **Redshift copy grants for cross-region snapshot copies**  
 - let's say you have a KMS-encrypted `Redshift Cluster` and a snapshot of it
@@ -419,7 +419,7 @@ Transport Layer Security (TLS) encrypts in-transit (between `Athena` and `S3`)
 - `WLM` queues manage which queries are sent to the concurrency scaling cluster
 
 **Automatic WLM**
-- creatues up to 8 queues
+- creates up to 8 queues
 - default 5 queues with even memory allocation
 - large queries ( e.g. big hash joins ) -> concurrency lowered
 - small queries ( e.g. inserts, scans, aggregations ) -> concurrency raised
@@ -444,10 +444,10 @@ Transport Layer Security (TLS) encrypts in-transit (between `Athena` and `S3`)
 - works with:
     - CREATE TABLE AS ( CTAs )
     - Read-only queries ( SELECT statements )
-- uses machine learning to predict a query's exectution time
-- can configure how many secodns is 'short'
+- uses machine learning to predict a query's execution time
+- can configure how many seconds is 'short'
 
-### *VaCUUM command*
+### *VACUUM command*
 - recovers space from deleted rows
 - VACUUM FULL - resort rows, reclaim space from delete rows
 - VACUUM DELETE ONLY -  same as full except that it skips the sorting
@@ -477,7 +477,7 @@ Transport Layer Security (TLS) encrypts in-transit (between `Athena` and `S3`)
 ### *Security Concerns*
 - using a Hardware Security Module ( HSM )
     - must use a client and server certificate to configure a trusted connection between `Redshift` and the HSM
-    - if migrating an unencrypted clustr to an HSM-encrypted cluster, you must create the new encrypted cluster and then move data to it
+    - if migrating an unencrypted cluster to an HSM-encrypted cluster, you must create the new encrypted cluster and then move data to it
 - defining access privileges for user or group
     - use the GRANT or REVOKE commands in SQL
     - example: grant select on table foo to bob;

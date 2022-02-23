@@ -129,7 +129,7 @@ Three Types of Customer Master Keys ( CMK )
 - `Kinesis Data Streams`
     - SSL endpoints using the HTTPS protocol to do encryption in flight
     - `AWS KMS` provides server-side encryption
-    - for client side encryption, you must your own encryption libraries
+    - for client side encryption, you must use your own encryption libraries
     - supported interface `VPC Endpoints` / `Private Link` - access privately
     - `KCL` - must get read / write access to DynamoDB table
 - `Kinesis Data Firehose`
@@ -188,7 +188,7 @@ Three Types of Customer Master Keys ( CMK )
 - `KMS` provides encryption at rest
 - SSL provides encryption in-flight
 - `IAM` policies provide protection for the `RDS API`
-- `IAM authentication is supported by PostgresSQL and MySQL
+- `IAM` authentication is supported by PostgresSQL and MySQL
 - must manage user permissions within the database itself
 - MSSQL Server and Oracle support TDE ( Transparent Data Encryption )
 
@@ -225,7 +225,7 @@ Three Types of Customer Master Keys ( CMK )
 **VERY IMPORTANT**
 ### *EMR*
 - using `Amazon EC2` key pair for SSH credentials
-- attach `IAM` roles to `EC2 instances forL
+- attach `IAM` roles to `EC2` instances for:
     - proper `S3` access
     - for `EMRFS` requests to `S3`
     - `DynamoDB` scans through `Hive`

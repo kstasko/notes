@@ -30,7 +30,7 @@ A way to run code snippets in the cloud - serverless, continuous scaling
 
 Lambda code receives an event with a batch of streams records
 - you specify a batch size when setting up the trigger (up to 10k records)
-- `too large a btach size can cause timeouts!`
+- `too large a batch size can cause timeouts!`
 - batches may also be split beyond Lambda's payload limit (6MB)  
 
 Lambda will retry the batch until it succeeds or the data expires
@@ -98,7 +98,7 @@ Serverless discovery and definition of table definitions and schema
 ### *Glue & ETL - MUST KNOW*
 - automatic code generation
 - Scala or Python
-- Ecryption
+- Encryption
     - Server-side (at-rest)
     - SSL (in transit)
 - can be event-driven
@@ -111,7 +111,7 @@ Serverless discovery and definition of table definitions and schema
 > You can do this by a graphical interface 
 > that lets you define how you want that transformation to work 
 > and it will actually do that using Apcache Spark under the hood 
-> using Scala or Python codde, fully encryptd both at rest and in transit.
+> using Scala or Python code, fully encrypted both at rest and in transit.
 > Can be event-driven if you want it to be or it can run on a schedule.
 
 - Transform data, Clean Data, Enrich Data (before doing analysis)
@@ -137,7 +137,7 @@ Bundled Transformations
 - Map - add fields, delete fields, perform external lookups  
 
 `Machine Learning Transformations`
-- **FindMatches ML** - identify duplicate or matching records in your dataset, even when the reccords do not have a common unique identifier and no fields match exactly
+- **FindMatches ML** - identify duplicate or matching records in your dataset, even when the records do not have a common unique identifier and no fields match exactly
 
 Format conversions: CSV, JSON, Avro, Parquet, ORC, XML
 Apache Spark transformations (example: K-means)
@@ -260,7 +260,7 @@ The Finer Points
 - IAM permissions on the KMS encryption key are needed for encrypted data catalogs in Lake Formation
 - IAM permissions needed to create blueprints and workflows
 
-## Elastic MapReduce (EMR)
+## Elastic MapReduce ( EMR )
 --
 ### EMR Architecture
 - Managed Hadoop framework on EC2 instances
@@ -273,7 +273,8 @@ The Finer Points
 > be able to have explicit control over the resources that it has, EMR might be for you
 
 EMR Cluster
-> An EMR cluster fundamentally is just a collection of EC2 instances that are running Hadoop. Each one of these instances is called a node.
+> An EMR cluster fundamentally is just a collection of EC2 instances that are running Hadoop.
+> Each one of these instances is called a node.
 
 **Master Node** - manages the cluster
 - tracks status of tasks, monitors cluster health
@@ -302,42 +303,42 @@ Transient vs Long-Running Clusters
     - Termination protection on by default, auto-termination off
 
 - Frameworks and applications are specified at cluster launch
-- Connect directly to master to run jobs directly
+- Connect directly to `master node` to run jobs directly
 - Or, submit ordered steps via the console
     - Process data in S3 or HDFS
     - Output data to S3 or somewhere
     - Once defined, steps can be invoked via the console
 
 ### EMR AWS Integration
-- EC2 - for the instances that comprise the nodes in the cluster
-- VPC - to configure the virtual network in which you launch your instances
-- S3 - to store input and output data
-- CloudWatch - to monitor cluster performance and configure alamrs
-- IAM - to configure permissions
-- CloudTrail - to audit requests made to the service
-- Data Pipeline - to schedule and start your clusters
+- `EC2` - for the instances that comprise the nodes in the cluster
+- `VPC` - to configure the virtual network in which you launch your instances
+- `S3` - to store input and output data
+- `CloudWatch` - to monitor cluster performance and configure alarms
+- `IAM` - to configure permissions
+- `CloudTrail` - to audit requests made to the service
+- `Data Pipeline` - to schedule and start your clusters
 
 ### EMR Storage
-Hadoop Distributed File System (HDFS)
+Hadoop Distributed File System ( HDFS )
 - Multiple copies stored across cluster instances for redundnacy
-- Files stored as blocks (128 MB default size)
+- Files stored as blocks ( 128 MB default size )
 - `Ephemeral - HDFS data is lost when cluster is terminated`
-    - useful for caching intermediate results or workloads with significant random I/O
+    - useful for caching intermediate results or workloads with significant random I / O
 - Hadoop tries to process data where it is stored on HDFS
 
 EMRFS: access S3 as if it were HDFS
 - allows persistent storage after cluster termination  
 
 **EMRFS Consistent View** - Optional for S3 consistency
-    - Uses DynamoDB to track consistency
-    - May need to tinker with read/write capacity on DynamoDB
+    - Uses `DynamoDB` to track consistency
+    - May need to tinker with read / write capacity on `DynamoDB`
 - Strongly Consistent
 
 Local File system
-- suitable only for temporary data (buffer, caches, etc)
+- suitable only for temporary data ( buffer, caches, etc )
 
 Elastic Block Store for HDFS
-- allows use of EMR on EBS-only types (M4, C4)
+- allows use of EMR on EBS-only types ( M4, C4 )
 - Deleted when cluster is terminated
 - EBS volumes can only be attached when launching a cluster
 - If you manually detach an EBS volume, EMR treats that as a failure and replaces it
@@ -345,25 +346,25 @@ Elastic Block Store for HDFS
 > If you do want persistent storage that's going to last after your cluster is terminated, you have to use the EMRFS with S3
 
 ### EMR Promises; Intro to Hadoop
-- EMR charges by the hour + EC2 charges
-- Provisions new nodes if a core node fails
-- Can add and remove tasks nodes on the fly
-    - Increase processing capacity, but not HDFS capacity
-- Can resize a running cluter's core nodes
+- `EMR` charges by the hour + `EC2` charges
+- provisions new nodes if a core node fails
+- can add and remove `tasks nodes` on the fly
+    - increase processing capacity, but not HDFS capacity
+- can resize a running cluster's `core nodes`
     - Increase both processing and HDFS capacity
-- Core nodes can also be added or removed
+- `core nodes` can also be added or removed
     - But removing risks data loss
 
 > generally speaking if you need a temporary increase in processing capacity adding tasks nodes is a good way to do that.
-> If you need to add a storage capacity as well on HDFS you can resize a core node.
-> You can also add and remove core nodes on the fly just like you can with task nodes.
+> If you need to add storage capacity as well on HDFS you can resize a `core node`.
+> You can also add and remove core nodes on the fly just like you can with `task nodes`.
 
 Managed Scaling
-- EMR Automatic Scaling
+- `EMR` Automatic Scaling
     - the wold way of doing it
     - Custom scaling rules based on CloutWatch metrics
     - Supports instance groups only
-- EMR Managed Scaling
+- `EMR` Managed Scaling
     - Support instance groups and instance fleets
     - Scales spot, on-demand, and instances in a Savings Plan within the same cluster
     - Available for Spark, Hive, YARN workloads
@@ -374,8 +375,6 @@ Managed Scaling
     - Spot nodes always removed before on-demand instances
 
 `Hadoop common / core = MapReduce, YARN, HDFS`
-
-Maybe come back to this slide
 
 ### Apache Spark Intro
 - distributed processing framework for big data
@@ -394,14 +393,14 @@ Maybe come back to this slide
 - Spark is NOT meant for OLTP
 
 ### Hive on EMR
-> The important thing to know is that Hive basically exposes SQL interfaces to your underlying data stored on your EMR cluster.
+> Hive basically exposes SQL interfaces to your underlying data stored on your EMR cluster.
 
-Why Hive
+**Why Hive**
 - uses familiar SQL syntax ( HiveQL )
 - Scalable - works with 'big data' ( really most appropriate for data warehouse applications )
 - Easy OLAP queries
 
-The Hive Metastore
+**The Hive Metastore**
 - Hive mainains a 'metastore' that imparts a structure you define on the unstructured data that is stored on HDFS 
 External Hive Metastores
 - Metastore is stored in MySQL on the master node by default
@@ -448,7 +447,7 @@ External Hive Metastores
 - optimized for OLAP 
 - developed and still partially maintained by Facebook
 - this is what Athena uses under the hood
-- expoes JDBC, Command-Line and Tableau interfaces
+- exposes JDBC, Command-Line and Tableau interfaces
 
 #### *Connectors*
 HDFS , S3 , Cassandra , MongoDB , HBase , SQL , Redshift , Teradata

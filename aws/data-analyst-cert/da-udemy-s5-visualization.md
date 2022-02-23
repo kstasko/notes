@@ -110,7 +110,7 @@ scales to hundreds of thousands of users
 - answers business questions with `Natural Language Processing`
     - "What are the top-selling items in Florida?"
 - offered as an add-on for given regions
-- personal training on how to ue it is required
+- personal training on how to use it is required
 - must set up `topics` associated with `datasets`
     - `datasets` and their fileds must be NLP-friendly
     - how to handle dates must be defined
@@ -123,7 +123,7 @@ scales to hundreds of thousands of users
 - `Scatter Plots`, `Heat Maps` - for correlation
 - `Pie Graphs`, `Tree Maps` - for aggregation
 - `Pivot Tables` - for tabular data
-- `KPIs` - Key Performance Indicators
+- `KPIs` - Key Performance Indicators - used to give information about the current performance of a company
 - `Geospatial Charts`
 - `Donut Charts` - percentage of a given thing for the total amount
 - `Gauge Charts`
@@ -131,7 +131,7 @@ scales to hundreds of thousands of users
 
 ## *Other Visualization Tools*
 ---  
-- Web-basd visualization tools ( deployed to the public )
+- Web-based visualization tools ( deployed to the public )
     - D3.js
     - Chart.js
     - Highchart.js
