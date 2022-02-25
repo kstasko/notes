@@ -113,12 +113,11 @@ You can stream CloudWatch logs into:
 
 ### SQS vs Kinesis
 ---
-`**Check Udemy Note for lecture**' 
 
 ## IoT 
 ---
 ### *Overview*
-> I would say the most important things [to know] is going to be the thing registry to know that there is security, the IoT message broker, the rules engine and the device shadow.  
+> I would say the most important things [to know] is going to be the thing registry, to know that there is security, the IoT message broker, the rules engine and the device shadow.  
 
 `device gateway` - enables your device to securely communicate
 `rules engine` - contains rules that you can define allowing you to modify the behavior of your devices based on them. `It allows us to send data to many different targets.`
