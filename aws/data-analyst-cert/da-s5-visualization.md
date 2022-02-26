@@ -17,7 +17,7 @@
 
 **Data Sources**  
 Data preparation allows limited ETL  
-`Redshift`, `Aurora`, `Athena`, `EC2-hosted databaes`  
+`Redshift`, `Aurora`, `Athena`, `EC2-hosted databases`  
 
 Files (`S3` or on-premises ):
 - excel
