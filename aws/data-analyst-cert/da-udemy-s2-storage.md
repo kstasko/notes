@@ -50,7 +50,7 @@
 - automatically moves objects between two access tiers based on changing access patterns
 
 ### *Amazon Glacier*  
-- low cost object storage meant for archiving/backup
+- low cost object storage meant for archiving / backup
 - data is retained for the longer term (decades)
 - Each item in Glacier is called an 'Archive' (up to 40TB)
 - `Archives` are stored in Vault
@@ -69,7 +69,7 @@
 - `bulk (48 hours)`
 
 ### *S3 Lifecycle Rules*
-- `transition actions` - it defines when objects are transitioned to another storage class
+- `transition actions` - defines when objects are transitioned to another storage class
 - `expiration actions` - configure objects to expire ( delete ) after some time
     - can be used to delete old versions of files ( if versioning is enabled )
 
@@ -77,7 +77,7 @@
 `rules can be created for certain object tags`
 
 ### *S3 Versioning*
-`Any file that is not versioned prior to eabling versioning will have version 'null'`
+`Any file that is not versioned prior to enabling versioning will have version 'null'`
 `Suspending versioning does not delete the previous versions`
 
 ### *S3 Replication (CRR & SRR)*
@@ -172,6 +172,7 @@ Target Services:
 ### *Partition Keys*
 - Partition Key only (HASH)
 - Partition Key + Sort Key
+
 > dynamoDB is going to be more for when your data is hot and smaller. While S3 is going to be more when data is a bi colder but much bigger
 
 ### *Provisioned Throughput*
@@ -188,7 +189,7 @@ Target Services:
 **Eventually Consistent** - If we read just after a write, it's posisble we will get unexpected response because of replication
 **Strongly Consistent** - If we read just after a write, we will get the correct data
 
-By Default DynamoDB uses Eventually Consistent RReads, but GetItem, Query & Scan provide 'ConsistentRead' parameters you can set to True
+By Default DynamoDB uses Eventually Consistent Rreads, but GetItem, Query & Scan provide 'ConsistentRead' parameters you can set to True
 
 #### Read Capacity Units (RCU)
 - one read capacity unit represents one strongly consistent read per second, or two eventually consistent read per second for an item up to 4 KB in size
@@ -235,7 +236,7 @@ Each partition:
 ### DynamoDb - Reading Data
 **GetItem** 
 - Read based on Primary key
-- Primaryk Key = HASH or HASH-RANGE
+- Primary Key = HASH or HASH-RANGE
 - Eventually consistent read by default
 - option to use strongly consistent reads
 **BatchGetItem**

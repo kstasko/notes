@@ -5,6 +5,7 @@
 
 ## AWS Lambda
 ---  
+[tutorialsdojo.com - Athena Cheat Sheet](https://tutorialsdojo.com/aws-lambda/)
 ### *Overview*
 A way to run code snippets in the cloud - serverless, continuous scaling
 - often used to process data as it's moved around
@@ -35,7 +36,7 @@ Lambda code receives an event with a batch of streams records
 
 Lambda will retry the batch until it succeeds or the data expires
 - this can stall the shard if you do not handle errors properly
-- use more shards to ensure processing is not totally help up by errors
+- use more shards to ensure processing is not totally held up by errors
 - Lambda processes shard data synchronously
 
 ### Costs
@@ -62,6 +63,8 @@ Pay for what you use
 
 ## AWS Glue
 ---
+[tutorialsdojo.com - Glue Cheat Sheet](https://tutorialsdojo.com/aws-glue/)
+
 ### *Overview*
 Serverless discovery and definition of table definitions and schema
 - S3 data lakes
@@ -80,7 +83,7 @@ Serverless discovery and definition of table definitions and schema
     - stores only table definition
     - original data stays in `S3`
 - once cataloged, you can tread your unstructured data like it's structured
-    - redshift spetrum
+    - redshift spectrum
     - athena
     - EMR
     - quicksight  
@@ -164,9 +167,8 @@ Apache Spark transformations (example: K-means)
 - Restrictions
     - S3 only
     - JSON, CSV, Avro, Parquet, only
-        - Parquer requires special code
+        - Parquet requires special code
     - nested scheams are not supported
-
 
 ### Development Endpoints, Running ETL Jobs with Bookmarks
 **Development Endpoints**
@@ -206,11 +208,10 @@ Apache Spark transformations (example: K-means)
 
 **No longer an Anti-Pattern: Streaming**
 - Glue ETL supports serverless streaming ETL
-    - consumes from Knesis or Kafka 
+    - consumes from Kinesis or Kafka 
     - Clean & transform in-flight
     - Store results into S3 or other data stores  
 - Runs on Apache Spark Structured Streaming
-
 
 ### Glue Studio
 `For the Exam you really only need to now what it is and what is for`
@@ -224,12 +225,11 @@ Apache Spark transformations (example: K-means)
 - Visual Job dashboard
     - overviews, status, run times
 
-
 ### Glue DataBrew
 - a visual data prep tool
     - UI for pre-processing large data sets
 - Over 250 ready-made transformations
-- You create 'recipes' of transformations taht can be saved as jobs within a larger project
+- You create 'recipes' of transformations that can be saved as jobs within a larger project
 - Security
     - integrates with KMS
     - SSL in transit
@@ -252,16 +252,18 @@ Apache Spark transformations (example: K-means)
 No cost for Lake Formation itself, only for the services underneath used
 
 The Finer Points
-- cross-account Lake FOrmation permission
+- cross-account Lake Formation permission
     - recipient must be set up as a data lake admin
     - can use AWS Resource Access Manager for acounts external to your org
     - IAM permissions for cross-account access
-- Lake FOrmation does not support manifests in Athena or Redshift queries
+- Lake Formation does not support manifests in Athena or Redshift queries
 - IAM permissions on the KMS encryption key are needed for encrypted data catalogs in Lake Formation
 - IAM permissions needed to create blueprints and workflows
 
 ## Elastic MapReduce ( EMR )
 --
+[tutorialsdojo.com - EMR cheat sheet](https://tutorialsdojo.com/amazon-emr/)
+
 ### EMR Architecture
 - Managed Hadoop framework on EC2 instances
 - includes Spark, HBase, Presto, Flink, Hive & more

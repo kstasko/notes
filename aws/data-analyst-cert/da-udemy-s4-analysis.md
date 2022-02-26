@@ -4,6 +4,7 @@
 
 ## Kinesis Analytics
 ---  
+
 ### *Overview*
 > another system for querying streams of data continuously, very similar in spirit to `Spark Streaming`
 
@@ -70,6 +71,8 @@
 
 ## Elasticsearch / OpenSearch
 ---  
+[tutorialsdojo.com - Opensearch Cheat Sheet](https://tutorialsdojo.com/amazon-elasticsearch-amazon-es/)
+
 ### *Overview*
 - a fork of `Elasicsearch` & `Kibana`
 - a search engine
@@ -198,6 +201,8 @@ ISM policies are run every 30-48 minutes
 
 ## Athena
 ---  
+[tutorialsdojo.com - Athena Cheat Sheet](https://tutorialsdojo.com/amazon-athena/)
+
 ### *Overview*
 - Interactive query service for `S3`
     - No need to load data, it stays in `S3`
@@ -268,6 +273,8 @@ Transport Layer Security (TLS) encrypts in-transit (between `Athena` and `S3`)
 
 ## Redshift
 ---
+[tutorialsdojo.com - RedShift Cheat Sheet](https://tutorialsdojo.com/amazon-redshift/)
+
 ### *Overview*
 - fully-managed, petabyte scale data warehouse service
 - 10X better performance than other DW's

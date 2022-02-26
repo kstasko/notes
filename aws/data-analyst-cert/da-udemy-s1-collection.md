@@ -59,7 +59,7 @@ When not to use KPL:
 **Handling Duplicates for Producers**  
 - `Producer` retries can create duplicates due to network timeouts
    - `fix is to embed a unique record ID in the data to be able to deduplicate based on that surrogate key`
-**Handling Duplicates for  Consumers**
+**Handling Duplicates for Consumers**
 consumer retries happen when record processors restart:
 - `a worker terminates unexpectedly`
 - `worker instances are added or removed`
@@ -78,7 +78,7 @@ stores data into a target destination (batch writes)
  - fully managed service with no administration
  - near real time (60 second latency minimum for non full batches)
 
-`You do not lose data with firehose, either it ends in your targets or you will have a recollection of all the transformation failes, delivery failures, etc in another s3 bucket`
+`You do not lose data with firehose, either it ends in your targets or you will have a recollection of all the transformation fails, delivery failures, etc in another S3 bucket`
 
 > How do you get all the source data into an amazon S3 bucket through Kinesis data Firhose, this is directly a feature of Firehose!
 
@@ -108,7 +108,7 @@ You can stream CloudWatch logs into:
 - sends S3 key to SQS queue and tells consumers where to download the larger than 256kB file
 
 ### *Limits*
-- `FIFO supports up to 3000 mess age per second (using batching)`
+- `FIFO supports up to 3000 messages per second ( using batching )`
 - maximum message size is 256kB
 
 ### SQS vs Kinesis
@@ -179,11 +179,11 @@ Provides a dedicated private connection from the remote network into your VPC
 #### **Connection Types**
 - dedicated connection - 1Gb/s to 10 Gb/s capacity  
     - physical ethernet port per dedicated customer  
-- hosted connection - up to 10 Gb/s
-> in the exam they will ask you questions around 'we want to transfer some data within a week and we want it to be fast.' So  an answer CANNOT be direct connect
+- hosted connection - up to 10 Gb/s  
+> in the exam they will ask you questions around 'we want to transfer some data within a week and we want it to be fast.' So an answer CANNOT be direct connect
 
 #### **High Resiliency**
-> Two corporate data centers and have two different direct conncect locations, and this gives us some redundnacy
+> Two corporate data centers and have two different direct connect locations, and this gives us some redundnacy
 
 #### **Maximum Resiliency**
 > setup again two direct connect locations, but this time each direct connect locations will have two connections independence to give you max resiliency. 
@@ -205,7 +205,7 @@ Offline devices that allow you to perform data migrations
 - migration size - up to 24 terrabytes offline
 - datasync agent - pre installed
 
-#### `Snow mobile`
+#### `Snow Mobile`
 - storage - 100 petabytes
 - migration size - up to exabytes offline
 
@@ -229,5 +229,3 @@ Network Security
 - `SASL/SCRM (AuthN) + Kafka ACLs (AuthZ)  `
 
 > Kafka ACLs for mutual TLS and SASL/SCRAM `cannot` be managed using IAM polciies. They have to be defined from within your Kafka cluster
-
-Come back and make table of differences between MSK vs Kinesis

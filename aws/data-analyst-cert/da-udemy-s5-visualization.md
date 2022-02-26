@@ -4,6 +4,8 @@
 
 ## Amazon Quicksight
 ---  
+[tutorialsdogo.com - Quicksight Cheat Sheet](https://tutorialsdojo.com/amazon-quicksight/)
+
 ### *Overview*
 - fast, easy, cloud-powered business analytics service
 - allows all employees in an organization to:
