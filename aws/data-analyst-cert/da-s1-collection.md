@@ -4,6 +4,8 @@
 
 ## Kinesis Suite
 ---  
+[tutorialsdojo.com - Kineis Cheat Sheet](https://tutorialsdojo.com/amazon-kinesis/)
+
 - `Kinesis Firehose` is **near-real time** streaming of data
 - a `Kinesis Streams` Record is a data blob **up to 1 MB in size**
 - `Producers` can only produce 1MB or 1000 messages per second at write per shard  

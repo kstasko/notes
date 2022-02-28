@@ -4,7 +4,6 @@
 
 ## Kinesis Analytics
 ---  
-
 ### *Overview*
 > another system for querying streams of data continuously, very similar in spirit to `Spark Streaming`
 

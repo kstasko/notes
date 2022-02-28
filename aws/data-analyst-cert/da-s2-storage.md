@@ -129,7 +129,7 @@
 - clients must decrpt data themselves when retrieving from S3
 - customer fully manages the keys and encryption cycle
 
-**Encryption in transit(SSL/TLS)
+**Encryption in transit(SSL/TLS)**  
 S3 exposes
 - HTTP endpoint: non encrypted
 - HTTPS endpoint: encryption in flight
@@ -259,5 +259,3 @@ Each partition:
 #### GSI
 - define new partition key + optional sort key
 - must define RCU and WCU for each GSI
-
-***** Aced Quiz and moving on to other topics that need more help. *****

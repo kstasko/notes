@@ -261,7 +261,7 @@ The Finer Points
 - IAM permissions needed to create blueprints and workflows
 
 ## Elastic MapReduce ( EMR )
---
+---  
 [tutorialsdojo.com - EMR cheat sheet](https://tutorialsdojo.com/amazon-emr/)
 
 ### EMR Architecture
