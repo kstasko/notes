@@ -1,11 +1,12 @@
 # notes
 
 ## **TODO**
-**Data Analyst Udemy Course**  
-- Section 3: Processing 17 - 35  
-- Section 4: Analysis 1 - 18  
-- Section 4: Analysis 18 - 34
+**Domain - Driven Design**
+- Domain-Driven Design *Quickly* by Avram & Marinescu
+- The Anatomy of Domain-Driven Design by Scott Millett
+- DDD Distilled by Vernon
 
 **Design Patterns**
-- Builder
+- Prototype
+- Restructure folders
 
