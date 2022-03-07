@@ -1,5 +1,5 @@
 # Domain-Driven Design Quickly
-## by Abel Avram & Floyd Marinescu
+### by Abel Avram & Floyd Marinescu
 ---  
 
 ## Preface: Why DDD Quickly  
