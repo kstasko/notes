@@ -38,4 +38,17 @@
 > _Clean code can be read and enhanced by a developer other than its original author. It has unit and acceptance tests. It has meaningful names. It provides one way rather than many ways for doing one thing. It has minimal dependencies, which are explicitly defined, and provides a clear minimal API. Code should be literate since depending on the language, not all necessarry information can be expressed clearly in code alone._
 
 **Michael Feathers, author of Working Effectively with Legacy Code**
-> _
+> _Clean code always looks like it was written by someone who cares. There is nothing obvious that you can do to make it better. All of those things were thought about by the code's author, and if you try to imagine improvements, you are led back to where you are, sitting in appreciation of the code someone left for you-code left by someone who cares deeply about the craft._
+
+**Ron Jeffries, author of Extreme Programming Installed & Extreme Programming Adventures in C#
+> _In recent years I begin, and nearly end, with Beck's rule of simple code. In priority order, simple code:_
+> - _runs all the tests; _
+> - _contains no duplication;_
+> - _expresses all the design ideas that are in the system;_
+> - _minimizes the number of entities such as clases, methods, functions and the like_
+
+> Of these, I focus mostly on duplication. When the same thing is done over and over; it's a sign that there is an idea in our mind that is not well represented in the code.
+> I try to figure out what it is. Then I try to express that idea more clearly.
+
+## We are Authors
+> ...we want the reading of code to be eay, even if it makes the writing harder. Of course there's no way to write code without reading it, so _making it easy to read actually makes it easier to write._
